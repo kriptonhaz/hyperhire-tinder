@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
     gap: 16,
     zIndex: 1000, // Ensure buttons are clickable above cards
   },

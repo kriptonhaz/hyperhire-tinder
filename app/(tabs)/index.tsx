@@ -86,13 +86,15 @@ export default function HomeScreen() {
 
       {/* Action Buttons */}
       {visibleProfiles.length > 0 && (
-        <ActionButtons
-          onRewind={handleRewind}
-          onDislike={handleDislike}
-          onStar={handleStar}
-          onLike={handleLike}
-          onBoost={handleBoost}
-        />
+        <View style={styles.actionButtonsContainer}>
+          <ActionButtons
+            onRewind={handleRewind}
+            onDislike={handleDislike}
+            onStar={handleStar}
+            onLike={handleLike}
+            onBoost={handleBoost}
+          />
+        </View>
       )}
     </SafeAreaView>
   );
@@ -116,9 +118,17 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 10,
+    paddingBottom: 60, // Space for action buttons
+  },
+  actionButtonsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingBottom: 20,
   },
   emptyState: {
     justifyContent: 'center',

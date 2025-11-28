@@ -23,7 +23,7 @@ import Animated, {
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH;
-const CARD_HEIGHT = SCREEN_HEIGHT * 0.65;
+const CARD_HEIGHT = SCREEN_HEIGHT * 0.7;
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25;
 
 interface SwipeCardProps {
@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     position: 'absolute',
     bottom: 0,
+    height: 180,
     left: 0,
     right: 0,
     padding: 20,
