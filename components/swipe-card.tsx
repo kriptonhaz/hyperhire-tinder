@@ -15,7 +15,8 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withSpring
+  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -44,22 +45,26 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
 
     useImperativeHandle(ref, () => ({
       swipeLeft: () => {
-        // Call callback immediately so next card appears right away
-        onSwipeLeft();
-        // Then animate the current card off screen
-        translateX.value = withSpring(
+        // Start animation first with timing for controlled speed
+        translateX.value = withTiming(
           -SCREEN_WIDTH * 1.5,
-          { damping: 20, stiffness: 90 }
+          { duration: 400 } // 400ms animation
         );
+        // Call callback after a tiny delay to let animation start
+        setTimeout(() => {
+          onSwipeLeft();
+        }, 50);
       },
       swipeRight: () => {
-        // Call callback immediately so next card appears right away
-        onSwipeRight();
-        // Then animate the current card off screen
-        translateX.value = withSpring(
+        // Start animation first with timing for controlled speed
+        translateX.value = withTiming(
           SCREEN_WIDTH * 1.5,
-          { damping: 20, stiffness: 90 }
+          { duration: 400 } // 400ms animation
         );
+        // Call callback after a tiny delay to let animation start
+        setTimeout(() => {
+          onSwipeRight();
+        }, 50);
       },
     }));
 
@@ -173,7 +178,7 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
             <View style={styles.locationRow}>
               <IconSymbol name="location.fill" size={16} color="#fff" />
               <Text style={styles.location}>
-                {profile.distance}km 거리에 있음
+                {profile.distance}km away
               </Text>
             </View>
 
