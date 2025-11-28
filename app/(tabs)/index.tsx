@@ -11,12 +11,10 @@ export default function HomeScreen() {
   const swipeCardRef = useRef<SwipeCardRef>(null);
 
   const handleSwipeLeft = () => {
-    console.log('Swiped left on:', profiles[currentIndex]?.name);
     setCurrentIndex((prev) => prev + 1);
   };
 
   const handleSwipeRight = () => {
-    console.log('Swiped right on:', profiles[currentIndex]?.name);
     setCurrentIndex((prev) => prev + 1);
   };
 
