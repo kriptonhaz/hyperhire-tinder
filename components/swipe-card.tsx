@@ -198,7 +198,7 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
             </View>
             
             <View style={styles.locationRow}>
-              <IconSymbol name="location.fill" size={16} color="#fff" />
+              <IconSymbol name="location-pin" size={16} color="#fff" forceMaterialIcon iconLibrary='SimpleLineIcons'/>
               <Text style={styles.location}>
                 {profile.distance}km away
               </Text>
