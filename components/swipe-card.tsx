@@ -2,11 +2,12 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import type { Profile } from '@/types/profile';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
   Text,
+  TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
@@ -46,6 +47,22 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
     const translateY = useSharedValue(0);
     const startX = useSharedValue(0);
     const startY = useSharedValue(0);
+    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+
+    const handleCardTap = (event: any) => {
+      const { locationX } = event.nativeEvent;
+      const cardMiddle = CARD_WIDTH / 2;
+      
+      if (locationX > cardMiddle) {
+        // Tapped right side - next photo
+        setCurrentPhotoIndex((prev) => 
+          prev < profile.images.length - 1 ? prev + 1 : prev
+        );
+      } else {
+        // Tapped left side - previous photo
+        setCurrentPhotoIndex((prev) => prev > 0 ? prev - 1 : prev);
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       swipeLeft: () => {
@@ -166,11 +183,33 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
         onHandlerStateChange={onHandlerStateChange}
         enabled={stackIndex === 0}>
         <Animated.View style={[styles.card, cardStyle, { zIndex: 100 - stackIndex }]}>
-          <Image
-            source={{ uri: profile.images[0] }}
-            style={styles.image}
-            contentFit="cover"
-          />
+          <TouchableWithoutFeedback onPress={handleCardTap}>
+            <View style={styles.cardContent}>
+              {/* Photo Indicator Bars */}
+              <View style={styles.photoIndicatorContainer}>
+                {profile.images.map((_, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.photoIndicatorBar,
+                      {
+                        flex: 1,
+                        backgroundColor: index === currentPhotoIndex 
+                          ? 'rgba(255, 255, 255, 0.9)' 
+                          : 'rgba(255, 255, 255, 0.3)',
+                      },
+                    ]}
+                  />
+                ))}
+              </View>
+
+              <Image
+                source={{ uri: profile.images[currentPhotoIndex] }}
+                style={styles.image}
+                contentFit="cover"
+              />
+            </View>
+          </TouchableWithoutFeedback>
           
 
           
@@ -236,6 +275,23 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     overflow: 'hidden',
+  },
+  cardContent: {
+    width: '100%',
+    height: '100%',
+  },
+  photoIndicatorContainer: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    right: 8,
+    flexDirection: 'row',
+    gap: 4,
+    zIndex: 10,
+  },
+  photoIndicatorBar: {
+    height: 3,
+    borderRadius: 2,
   },
   image: {
     width: '100%',
