@@ -1,6 +1,7 @@
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import type { Profile } from '@/types/profile';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { forwardRef, useImperativeHandle } from 'react';
 import {
   Dimensions,
@@ -171,9 +172,7 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
             contentFit="cover"
           />
           
-          {stackIndex > 0 && (
-            <Animated.View style={[styles.nextCardOverlay, overlayStyle]} />
-          )}
+
           
           <Animated.View style={[styles.likeOverlay, likeOpacityStyle]}>
             <Text style={styles.likeText}>LIKE</Text>
@@ -183,7 +182,10 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
             <Text style={styles.nopeText}>NOPE</Text>
           </Animated.View>
 
-          <View style={styles.infoContainer}>
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.9)']}
+            style={styles.infoContainer}
+          >
             <View style={styles.nameRow}>
               <Text style={styles.name}>
                 {profile.name} {profile.age}
@@ -207,7 +209,11 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
                 {profile.bio}
               </Text>
             )}
-          </View>
+          </LinearGradient>
+
+          {stackIndex > 0 && (
+            <Animated.View style={[styles.nextCardOverlay, overlayStyle]} />
+          )}
         </Animated.View>
       </PanGestureHandler>
     );
@@ -273,7 +279,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 20,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    paddingTop: 40,
   },
   nameRow: {
     flexDirection: 'row',
