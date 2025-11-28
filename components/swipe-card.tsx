@@ -17,10 +17,11 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
+  type SharedValue,
 } from 'react-native-reanimated';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const CARD_WIDTH = SCREEN_WIDTH * 0.9;
+const CARD_WIDTH = SCREEN_WIDTH;
 const CARD_HEIGHT = SCREEN_HEIGHT * 0.65;
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25;
 
@@ -29,6 +30,7 @@ interface SwipeCardProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   stackIndex: number;
+  activeOffsetX?: SharedValue<number>;
 }
 
 export interface SwipeCardRef {
@@ -37,8 +39,9 @@ export interface SwipeCardRef {
 }
 
 export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
-  ({ profile, onSwipeLeft, onSwipeRight, stackIndex }, ref) => {
-    const translateX = useSharedValue(0);
+  ({ profile, onSwipeLeft, onSwipeRight, stackIndex, activeOffsetX }, ref) => {
+    const internalX = useSharedValue(0);
+    const translateX = (stackIndex === 0 && activeOffsetX) ? activeOffsetX : internalX;
     const translateY = useSharedValue(0);
     const startX = useSharedValue(0);
     const startY = useSharedValue(0);
@@ -113,7 +116,7 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
       );
 
       const scale = 1 - stackIndex * 0.05;
-      const translateYOffset = stackIndex * 10;
+      const translateYOffset = stackIndex * 24;
 
       return {
         transform: [
@@ -143,6 +146,19 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
       ),
     }));
 
+    const overlayStyle = useAnimatedStyle(() => {
+      if (!activeOffsetX) return { opacity: 1 };
+      
+      return {
+        opacity: interpolate(
+          Math.abs(activeOffsetX.value),
+          [0, SWIPE_THRESHOLD],
+          [1, 0],
+          Extrapolate.CLAMP
+        ),
+      };
+    });
+
     return (
       <PanGestureHandler
         onGestureEvent={onGestureEvent}
@@ -154,6 +170,10 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
             style={styles.image}
             contentFit="cover"
           />
+          
+          {stackIndex > 0 && (
+            <Animated.View style={[styles.nextCardOverlay, overlayStyle]} />
+          )}
           
           <Animated.View style={[styles.likeOverlay, likeOpacityStyle]}>
             <Text style={styles.likeText}>LIKE</Text>
@@ -283,6 +303,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#fff',
     marginTop: 4,
+  },
+  nextCardOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgb(208,215,232)',
+    borderRadius: 16,
   },
 });
 

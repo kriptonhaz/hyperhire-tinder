@@ -2,13 +2,19 @@ import { ActionButtons } from '@/components/action-buttons';
 import { SwipeCard, type SwipeCardRef } from '@/components/swipe-card';
 import { mockProfiles, type Profile } from '@/types/profile';
 import { Image } from 'expo-image';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { useSharedValue } from 'react-native-reanimated';
 
 export default function HomeScreen() {
   const [profiles, setProfiles] = useState<Profile[]>(mockProfiles);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
+  const activeOffsetX = useSharedValue(0);
+
+  useEffect(() => {
+    activeOffsetX.value = 0;
+  }, [currentIndex]);
 
   const handleSwipeLeft = () => {
     setCurrentIndex((prev) => prev + 1);
@@ -41,7 +47,7 @@ export default function HomeScreen() {
     console.log('Boost activated');
   };
 
-  const visibleProfiles = profiles.slice(currentIndex, currentIndex + 3);
+  const visibleProfiles = profiles.slice(currentIndex, currentIndex + 2);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,6 +78,7 @@ export default function HomeScreen() {
               onSwipeLeft={handleSwipeLeft}
               onSwipeRight={handleSwipeRight}
               stackIndex={index}
+              activeOffsetX={activeOffsetX}
             />
           ))
         )}
