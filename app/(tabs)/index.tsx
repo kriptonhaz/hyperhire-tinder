@@ -50,7 +50,7 @@ export default function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require('@/assets/images/icon.png')}
+          source={require('@/assets/images/tinder-logo-with-text.svg')}
           style={styles.logo}
           contentFit="contain"
         />
@@ -103,8 +103,9 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: 120,
+    height: undefined,
+    aspectRatio: 1,
   },
   cardsContainer: {
     flex: 1,
