@@ -2,6 +2,11 @@
 
 A Tinder-inspired swiping app for Hyperhire, enabling users to discover and like profiles with a modern mobile interface.
 
+## Video Demo
+https://github.com/user-attachments/assets/1321d7c1-0183-4759-bd78-6584a5857942
+
+
+
 ## Tech Stack
 
 - **React Native** with [Expo](https://expo.dev)
