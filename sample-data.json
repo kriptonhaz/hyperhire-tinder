@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "name": "Esther",
+    "age": 30,
+    "bio": "Love traveling and photography ✈️📸",
+    "distance": 24,
+    "location": "Seoul",
+    "images": [
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=1200&fit=crop",
+      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=1200&fit=crop"
+    ],
+    "verified": true,
+    "interests": ["Travel", "Photography", "Cafes"]
+  },
+  {
+    "id": "2",
+    "name": "Jisoo",
+    "age": 28,
+    "bio": "Coffee and music lover ☕🎵",
+    "distance": 15,
+    "location": "Gangnam",
+    "images": [
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&h=1200&fit=crop"
+    ],
+    "verified": true,
+    "interests": ["Music", "Cafes", "Reading"]
+  },
+  {
+    "id": "3",
+    "name": "Minji",
+    "age": 26,
+    "bio": "Fitness and healthy lifestyle 💪🥗",
+    "distance": 18,
+    "location": "Mapo",
+    "images": [
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=1200&fit=crop"
+    ],
+    "verified": false,
+    "interests": ["Fitness", "Yoga", "Healthy Food"]
+  },
+  {
+    "id": "4",
+    "name": "Sujin",
+    "age": 29,
+    "bio": "Passionate about art and design 🎨",
+    "distance": 22,
+    "location": "Hongdae",
+    "images": [
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=800&h=1200&fit=crop"
+    ],
+    "verified": true,
+    "interests": ["Art", "Design", "Exhibitions"]
+  },
+  {
+    "id": "5",
+    "name": "Haeun",
+    "age": 27,
+    "bio": "Foodie and restaurant explorer 🍜🍰",
+    "distance": 12,
+    "location": "Itaewon",
+    "images": [
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1200&fit=crop"
+    ],
+    "verified": true,
+    "interests": ["Food", "Cooking", "Baking"]
+  }
+]
