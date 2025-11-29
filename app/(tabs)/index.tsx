@@ -1,5 +1,5 @@
-import { ActionButtons } from '@/components/action-buttons';
-import { SwipeCard, type SwipeCardRef } from '@/components/swipe-card';
+import { ActionButtons } from '@/components/organisms/action-buttons';
+import { SwipeCard, type SwipeCardRef } from '@/components/organisms/swipe-card';
 import { useProfiles } from '@/hooks/useProfiles';
 import { Image } from 'expo-image';
 import React, { useEffect, useRef, useState } from 'react';
