@@ -1,13 +1,13 @@
 import { ActionButtons } from '@/components/action-buttons';
 import { SwipeCard, type SwipeCardRef } from '@/components/swipe-card';
-import { mockProfiles, type Profile } from '@/types/profile';
+import { useProfiles } from '@/hooks/useProfiles';
 import { Image } from 'expo-image';
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const [profiles, setProfiles] = useState<Profile[]>(mockProfiles);
+  const { data: profiles, isLoading, error } = useProfiles();
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
   const activeOffsetX = useSharedValue(0);
@@ -39,7 +39,7 @@ export default function HomeScreen() {
   };
 
   const handleStar = () => {
-    console.log('Super liked:', profiles[currentIndex]?.name);
+    console.log('Super liked:', profiles?.[currentIndex]?.name);
     swipeCardRef.current?.swipeRight();
   };
 
@@ -47,7 +47,47 @@ export default function HomeScreen() {
     console.log('Boost activated');
   };
 
-  const visibleProfiles = profiles.slice(currentIndex, currentIndex + 2);
+  const visibleProfiles = profiles?.slice(currentIndex, currentIndex + 2) || [];
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.header}>
+          <Image
+            source={require('@/assets/images/tinder-logo-with-text.svg')}
+            style={styles.logo}
+            contentFit="contain"
+          />
+        </View>
+        <View style={[styles.cardsContainer, styles.centerContent]}>
+          <ActivityIndicator size="large" color="#FE3C72" />
+          <Text style={styles.loadingText}>Loading profiles...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.header}>
+          <Image
+            source={require('@/assets/images/tinder-logo-with-text.svg')}
+            style={styles.logo}
+            contentFit="contain"
+          />
+        </View>
+        <View style={[styles.cardsContainer, styles.centerContent]}>
+          <Text style={styles.errorText}>Failed to load profiles</Text>
+          <Text style={styles.emptySubtext}>Please try again later</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -144,6 +184,21 @@ const styles = StyleSheet.create({
   emptySubtext: {
     fontSize: 16,
     color: '#666',
+  },
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 16,
+  },
+  errorText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#F44336',
+    marginBottom: 8,
   },
 });
 
