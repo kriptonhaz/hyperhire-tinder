@@ -2,24 +2,24 @@ import { IconSymbol } from '@/components/atoms/icon-symbol';
 import type { Profile } from '@/types/profile';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import {
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    View
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
-    Extrapolate,
-    interpolate,
-    runOnJS,
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
-    withTiming,
-    type SharedValue,
+  Extrapolate,
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+  type SharedValue,
 } from 'react-native-reanimated';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -33,6 +33,7 @@ interface SwipeCardProps {
   onSwipeRight: () => void;
   stackIndex: number;
   activeOffsetX?: SharedValue<number>;
+  animatedText?: boolean;
 }
 
 export interface SwipeCardRef {
@@ -41,7 +42,7 @@ export interface SwipeCardRef {
 }
 
 export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
-  ({ profile, onSwipeLeft, onSwipeRight, stackIndex, activeOffsetX }, ref) => {
+  ({ profile, onSwipeLeft, onSwipeRight, stackIndex, activeOffsetX, animatedText = true }, ref) => {
     const internalX = useSharedValue(0);
     const translateX = (stackIndex === 0 && activeOffsetX) ? activeOffsetX : internalX;
     const translateY = useSharedValue(0);
@@ -212,14 +213,19 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
           </TouchableWithoutFeedback>
           
 
+          {
+            animatedText && 
+            <Animated.View style={[styles.likeOverlay, likeOpacityStyle]}>
+              <Text style={styles.likeText}>LIKE</Text>
+            </Animated.View>
+          }
           
-          <Animated.View style={[styles.likeOverlay, likeOpacityStyle]}>
-            <Text style={styles.likeText}>LIKE</Text>
-          </Animated.View>
-          
-          <Animated.View style={[styles.nopeOverlay, nopeOpacityStyle]}>
-            <Text style={styles.nopeText}>NOPE</Text>
-          </Animated.View>
+          {
+            animatedText && 
+            <Animated.View style={[styles.nopeOverlay, nopeOpacityStyle]}>
+              <Text style={styles.nopeText}>NOPE</Text>
+            </Animated.View>
+          }
 
           <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0.9)']}

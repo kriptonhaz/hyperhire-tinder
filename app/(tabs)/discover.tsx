@@ -2,7 +2,7 @@ import { SwipeCard, type SwipeCardRef } from '@/components/organisms/swipe-card'
 import { likedProfilesState } from '@/store/liked-profiles';
 import { Image } from 'expo-image';
 import { useAtomValue } from 'jotai';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
@@ -56,6 +56,7 @@ export default function DiscoverScreen() {
               onSwipeRight={handleSwipeRight}
               stackIndex={index}
               activeOffsetX={activeOffsetX}
+              animatedText={false}
             />
           ))
         )}
