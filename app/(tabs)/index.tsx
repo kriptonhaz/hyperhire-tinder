@@ -1,7 +1,9 @@
 import { ActionButtons } from '@/components/organisms/action-buttons';
 import { SwipeCard, type SwipeCardRef } from '@/components/organisms/swipe-card';
 import { useProfiles } from '@/hooks/useProfiles';
+import { likedProfilesState } from '@/store/liked-profiles';
 import { Image } from 'expo-image';
+import { useSetAtom } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -11,6 +13,7 @@ export default function HomeScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
   const activeOffsetX = useSharedValue(0);
+  const setLikedProfiles = useSetAtom(likedProfilesState);
 
   useEffect(() => {
     activeOffsetX.value = 0;
@@ -21,6 +24,9 @@ export default function HomeScreen() {
   };
 
   const handleSwipeRight = () => {
+    if (profiles && profiles[currentIndex]) {
+      setLikedProfiles((prev) => [...prev, profiles[currentIndex]]);
+    }
     setCurrentIndex((prev) => prev + 1);
   };
 

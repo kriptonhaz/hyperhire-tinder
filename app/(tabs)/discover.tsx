@@ -1,12 +1,13 @@
 import { SwipeCard, type SwipeCardRef } from '@/components/organisms/swipe-card';
-import { useProfiles } from '@/hooks/useProfiles';
+import { likedProfilesState } from '@/store/liked-profiles';
 import { Image } from 'expo-image';
+import { useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 export default function DiscoverScreen() {
-  const { data: profiles, isLoading, error } = useProfiles();
+  const likedProfiles = useAtomValue(likedProfilesState);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
   const activeOffsetX = useSharedValue(0);
@@ -23,47 +24,7 @@ export default function DiscoverScreen() {
     setCurrentIndex((prev) => prev + 1);
   };
 
-  const visibleProfiles = profiles?.slice(currentIndex, currentIndex + 2) || [];
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <View style={styles.header}>
-          <Image
-            source={require('@/assets/images/tinder-logo-with-text.svg')}
-            style={styles.logo}
-            contentFit="contain"
-          />
-        </View>
-        <View style={[styles.cardsContainer, styles.centerContent]}>
-          <ActivityIndicator size="large" color="#FE3C72" />
-          <Text style={styles.loadingText}>Loading profiles...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <View style={styles.header}>
-          <Image
-            source={require('@/assets/images/tinder-logo-with-text.svg')}
-            style={styles.logo}
-            contentFit="contain"
-          />
-        </View>
-        <View style={[styles.cardsContainer, styles.centerContent]}>
-          <Text style={styles.errorText}>Failed to load profiles</Text>
-          <Text style={styles.emptySubtext}>Please try again later</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const visibleProfiles = likedProfiles.slice(currentIndex, currentIndex + 2);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -82,8 +43,8 @@ export default function DiscoverScreen() {
       <View style={styles.cardsContainer}>
         {visibleProfiles.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No more profiles</Text>
-            <Text style={styles.emptySubtext}>Check back later for new matches!</Text>
+            <Text style={styles.emptyText}>No liked profiles yet</Text>
+            <Text style={styles.emptySubtext}>Go back to home and like some profiles!</Text>
           </View>
         ) : (
           visibleProfiles.map((profile, index) => (
